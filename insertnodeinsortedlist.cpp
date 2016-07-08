@@ -113,16 +113,17 @@ listnode * mergeSortedLists(listnode * first,listnode * second)
             }
             else
             thirdp=secondp;
+            third=thirdp;
               //     printf("%d %d %d",third->val,first->val,second->val);
     // fflush(stdout);
             while(firstp->next&&secondp->next)
             {
                     if(firstp->val<=secondp->val)
                     {
-                            third=first;
+                            third=firstp;
                             firstp=firstp->next;
                             third=third->next;
-                            third->next=NULL;
+                           // third->next=NULL;
 
                     }
                     else
@@ -130,23 +131,65 @@ listnode * mergeSortedLists(listnode * first,listnode * second)
                             third=secondp;
                             secondp=secondp->next;
                             third=third->next;
-                            third->next=NULL;
+                           // third->next=NULL;
                     }
 
 
 
             }
-            if(!(firstp->next&&secondp->next))
+            if(!(firstp->next||secondp->next))
             {
 
                 if(firstp->val<=secondp->val)
+                {
                 third->next=firstp;
                 third=third->next;
                 third->next=secondp;
+                }
+                else
+                {
+
+                   third->next=secondp;
+                third=third->next;
+                third->next=firstp;
+
+
+                }
+
                 return thirdp;
 
             }
             if(firstp->next==NULL)
+            {
+
+                    second=insertInSorted(second,firstp);
+                    while(secondp->next)
+                    {
+                        third->next=secondp;
+                        secondp=secondp->next;
+                        third=third->next;
+
+                    }
+                    third->next=secondp;
+                    return thirdp;
+
+            }
+           if(secondp->next==NULL)
+            {
+
+                    first=insertInSorted(first,secondp);
+                    while(firstp->next)
+                    {
+                        third->next=firstp;
+                        firstp=firstp->next;
+                        third=third->next;
+
+                    }
+                    third->next=firstp;
+                    return thirdp;
+
+            }
+         /*   if(firstp->next==NULL)
             {
 
                     if(firstp->val<=secondp->val)
@@ -176,15 +219,15 @@ listnode * mergeSortedLists(listnode * first,listnode * second)
                         }
                         third->next=firstp;
                         third=third->next;
-                        while(second->next)
+                        while(secondp->next)
                         {
-                                third->next=second;
-                                second=second->next;
+                                third->next=secondp;
+                                secondp=secondp->next;
                                 third=third->next;
 
 
                         }
-                        third->next=second;
+                        third->next=secondp;
                         return thirdp;
 
                     }
@@ -233,7 +276,9 @@ listnode * mergeSortedLists(listnode * first,listnode * second)
 
                     }
 
-            }
+            }*/
+            third->next=NULL;
+            return thirdp;
 
 
 }
@@ -251,7 +296,7 @@ int main()
      push(&head, 1);
     struct node * head2=NULL;
   //  push(&head2,8);
-    push(&head2, 7);
+     push(&head2, 7);
      push(&head2, 6);
      push(&head2, 5);
      push(&head2, 4);
