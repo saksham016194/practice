@@ -103,7 +103,18 @@ listnode * mergeSortedLists(listnode * first,listnode * second)
             }
             listnode * firstp=first;
             listnode * secondp=second;
+            listnode * thirdp=NULL;
             listnode * third=NULL;
+
+            if(firstp->val<=secondp->val)
+            {
+                    thirdp=firstp;
+
+            }
+            else
+            thirdp=secondp;
+              //     printf("%d %d %d",third->val,first->val,second->val);
+    // fflush(stdout);
             while(firstp->next&&secondp->next)
             {
                     if(firstp->val<=secondp->val)
@@ -125,24 +136,134 @@ listnode * mergeSortedLists(listnode * first,listnode * second)
 
 
             }
+            if(!(firstp->next&&secondp->next))
+            {
+
+                if(firstp->val<=secondp->val)
+                third->next=firstp;
+                third=third->next;
+                third->next=secondp;
+                return thirdp;
+
+            }
+            if(firstp->next==NULL)
+            {
+
+                    if(firstp->val<=secondp->val)
+                    {
+                        third->next=firstp;
+                        third=third->next;
+                          while(second->next)
+                        {
+                                third->next=second;
+                                second=second->next;
+                                third=third->next;
+
+
+                        }
+                        third->next=second;
+                        return thirdp;
+
+                    }
+                    else
+                    {
+                        while(firstp->val>secondp->val&&secondp->next)
+                        {
+                                third->next=secondp;
+                                third=third->next;
+                                secondp=secondp->next;
+
+                        }
+                        third->next=firstp;
+                        third=third->next;
+                        while(second->next)
+                        {
+                                third->next=second;
+                                second=second->next;
+                                third=third->next;
+
+
+                        }
+                        third->next=second;
+                        return thirdp;
+
+                    }
+
+            }
+              if(secondp->next==NULL)
+            {
+
+                    if(secondp->val<=firstp->val)
+                    {
+                        third->next=secondp;
+                        third=third->next;
+                          while(first->next)
+                        {
+                                third->next=first;
+                                first=first->next;
+                                third=third->next;
+
+
+                        }
+                        third->next=first;
+                        return thirdp;
+
+                    }
+                    else
+                    {
+                        while(secondp->val>firstp->val&&firstp->next)
+                        {
+                                third->next=firstp;
+                                third=third->next;
+                                firstp=firstp->next;
+
+                        }
+                        third->next=secondp;
+                        third=third->next;
+                        while(first->next)
+                        {
+                                third->next=first;
+                                first=first->next;
+                                third=third->next;
+
+
+                        }
+                        third->next=first;
+                        return thirdp;
+
+                    }
+
+            }
 
 
 }
+using namespace std;
+#include<iostream>
 int main()
 {
     /* Start with the empty list */
     struct node* head = NULL;
 
-     push(&head, 5);
-    /* push(&head, 6);
+     push(&head, 10);
+     push(&head, 6);
      push(&head, 3);
      push(&head, 2);
-     push(&head, 1);*/
+     push(&head, 1);
     struct node * head2=NULL;
-    push(&head2,8);
+  //  push(&head2,8);
+    push(&head2, 7);
+     push(&head2, 6);
+     push(&head2, 5);
+     push(&head2, 4);
+     push(&head2, 1);
      printList(head);
+     cout<<endl;
+     printList(head2);
+     cout<<endl;
+
    //  reverse(&head);
-   head=insertInSorted(head,head2);
+   //head=insertInSorted(head,head2);
+   head=mergeSortedLists(head,head2);
      printf("\n Reversed Linked list \n");
      printList(head);
     // getchar();
