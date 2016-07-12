@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
-
+using namespace std;
+#include<iostream>
 /* Link list node */
 typedef struct node
 {
@@ -84,202 +85,103 @@ listnode * insertInSorted(listnode * head,listnode * element)
 
 }
 /* Driver program to test above function*/
-listnode * mergeSortedLists(listnode * first,listnode * second)
+listnode * mergeInSorted(listnode * first,listnode * second)
 {
 
-            if(first==NULL)
-            return second;
-            if(second==NULL)
-            return first;
-            if(first->next==NULL)
-            {
-                second=insertInSorted(second,first);
-                return second;
-            }
-            if(second->next==NULL)
-            {
-                first=insertInSorted(first,second);
+        listnode * dummynode=(listnode *)(malloc(sizeof(listnode)));
+        dummynode->val=-1;
+        dummynode->next=NULL;
+        if(first==NULL)
+        return second;
+        if(second==NULL)
+        return first;
+        listnode * third=dummynode;
+        if(first->next==NULL)
+        {
+            third=insertInSorted(second,first);     //if one of the list has only one elemment;
+
+            return third->next;
+
+        }
+        if(second->next==NULL)
+        {
+            third=insertInSorted(first,second);
+            return third->next;
+
+        }
+        if(!(first->next&&second->next)) //if both list have one element
+        {
+            if(first->val<=second->val)
+            {first->next=second;
                 return first;
-            }
-            listnode * firstp=first;
-            listnode * secondp=second;
-            listnode * thirdp=NULL;
-            listnode * third=NULL;
+                }
+                else
+                second->next=first;
+                return second;
 
-            if(firstp->val<=secondp->val)
-            {
-                    thirdp=firstp;
+        }
+        while(1)
+        {
 
-            }
-            else
-            thirdp=secondp;
-            third=thirdp;
-              //     printf("%d %d %d",third->val,first->val,second->val);
-    // fflush(stdout);
-            while(firstp->next&&secondp->next)
-            {
-                    if(firstp->val<=secondp->val)
-                    {
-                            third=firstp;
-                            firstp=firstp->next;
-                            third=third->next;
-                           // third->next=NULL;
-
+                if(first->val<=second->val)
+                {
+                    dummynode->next=first;
+                     dummynode=dummynode->next;
+                    if(first->next!=NULL)
+                    {first=first->next;
+                   // cout<<"first->"<<first->val<<endl;
                     }
                     else
-                    {
-                            third=secondp;
-                            secondp=secondp->next;
-                            third=third->next;
-                           // third->next=NULL;
-                    }
+                    break;
 
-
-
-            }
-            if(!(firstp->next||secondp->next))
-            {
-
-                if(firstp->val<=secondp->val)
-                {
-                third->next=firstp;
-                third=third->next;
-                third->next=secondp;
                 }
                 else
                 {
-
-                   third->next=secondp;
-                third=third->next;
-                third->next=firstp;
+                    dummynode->next=second;
+                     dummynode=dummynode->next;
+                     if(second->next!=NULL)
+                    { second=second->next;
+                    //  cout<<"second->"<<second->val<<endl;
+                      }
+                     else
+                     break;
 
 
                 }
 
-                return thirdp;
 
-            }
-            if(firstp->next==NULL)
-            {
+        }
+        if(first->next==NULL&&second->next==NULL)
+        {
+                if(first->val<=second->val)
+              {  dummynode->next=first;
+                    dummynode=dummynode->next;
+                    dummynode->next=second;
+                    return third->next;
+                }
+                else
+                {
+                dummynode->next=second;
+                      dummynode=dummynode->next;
+                    dummynode->next=first;
+                    return third->next;
+                }
 
-                    second=insertInSorted(second,firstp);
-                    while(secondp->next)
-                    {
-                        third->next=secondp;
-                        secondp=secondp->next;
-                        third=third->next;
-
-                    }
-                    third->next=secondp;
-                    return thirdp;
-
-            }
-           if(secondp->next==NULL)
-            {
-
-                    first=insertInSorted(first,secondp);
-                    while(firstp->next)
-                    {
-                        third->next=firstp;
-                        firstp=firstp->next;
-                        third=third->next;
-
-                    }
-                    third->next=firstp;
-                    return thirdp;
-
-            }
-         /*   if(firstp->next==NULL)
-            {
-
-                    if(firstp->val<=secondp->val)
-                    {
-                        third->next=firstp;
-                        third=third->next;
-                          while(second->next)
-                        {
-                                third->next=second;
-                                second=second->next;
-                                third=third->next;
-
-
-                        }
-                        third->next=second;
-                        return thirdp;
-
-                    }
-                    else
-                    {
-                        while(firstp->val>secondp->val&&secondp->next)
-                        {
-                                third->next=secondp;
-                                third=third->next;
-                                secondp=secondp->next;
-
-                        }
-                        third->next=firstp;
-                        third=third->next;
-                        while(secondp->next)
-                        {
-                                third->next=secondp;
-                                secondp=secondp->next;
-                                third=third->next;
-
-
-                        }
-                        third->next=secondp;
-                        return thirdp;
-
-                    }
-
-            }
-              if(secondp->next==NULL)
-            {
-
-                    if(secondp->val<=firstp->val)
-                    {
-                        third->next=secondp;
-                        third=third->next;
-                          while(first->next)
-                        {
-                                third->next=first;
-                                first=first->next;
-                                third=third->next;
-
-
-                        }
-                        third->next=first;
-                        return thirdp;
-
-                    }
-                    else
-                    {
-                        while(secondp->val>firstp->val&&firstp->next)
-                        {
-                                third->next=firstp;
-                                third=third->next;
-                                firstp=firstp->next;
-
-                        }
-                        third->next=secondp;
-                        third=third->next;
-                        while(first->next)
-                        {
-                                third->next=first;
-                                first=first->next;
-                                third=third->next;
-
-
-                        }
-                        third->next=first;
-                        return thirdp;
-
-                    }
-
-            }*/
-            third->next=NULL;
-            return thirdp;
-
+        }
+        if(first->next!=NULL)
+        {
+            dummynode->next=first->next;
+                                                                    //attach rest of first
+            dummynode=dummynode->next;
+            //third=insertInSorted(third,second);
+        }
+        if(second->next!=NULL)
+        {
+            dummynode->next=second->next;
+            dummynode=dummynode->next;                  //attach rest of second list
+           // third= insertInSorted(third,first);
+        }
+        return third->next;
 
 }
 using namespace std;
@@ -289,18 +191,18 @@ int main()
     /* Start with the empty list */
     struct node* head = NULL;
 
-     push(&head, 10);
-     push(&head, 6);
-     push(&head, 3);
-     push(&head, 2);
-     push(&head, 1);
+    // push(&head, 100);
+    // push(&head, 6);
+    // push(&head, 3);
+    // push(&head, 2);
+    // push(&head, 1);
     struct node * head2=NULL;
-  //  push(&head2,8);
-     push(&head2, 7);
+   // push(&head2,100);
+     push(&head2, 10);
      push(&head2, 6);
      push(&head2, 5);
      push(&head2, 4);
-     push(&head2, 1);
+    push(&head2, 1);
      printList(head);
      cout<<endl;
      printList(head2);
@@ -308,7 +210,7 @@ int main()
 
    //  reverse(&head);
    //head=insertInSorted(head,head2);
-   head=mergeSortedLists(head,head2);
+   head=mergeInSorted(head,head2);
      printf("\n Reversed Linked list \n");
      printList(head);
     // getchar();
